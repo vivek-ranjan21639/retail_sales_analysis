@@ -485,5 +485,5 @@ Other than the above, there are several other insights, like customers who order
 This project aims to uncover insights about potential customers who could contribute to future growth, explore customer characteristics across different product categories, and analyse sales trends, seasonality, and customer purchasing behaviour. Although the dataset is small, it holds significant potential for deeper insights. Many questions have been intentionally left out to maintain focus on clear and specific business objectives. A separate project could be undertaken to explore additional insights without complicating the current analysis. 
 
 
-### Any user may use this project for learning purposes. They may do so by cloning this repo.
+#### Any user may use this project for learning purposes. They may do so by cloning this repo.
  
