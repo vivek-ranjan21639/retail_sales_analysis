@@ -20,12 +20,12 @@ This project explores retail sales data and performs exploratory data analysis a
 - created a table titled 'retail_sales'.The table structure includes columns for transaction ID, sale date, sale time, customer ID, gender, age, product category, quantity sold, price per unit, cost of goods sold (COGS), and total sale amount.
 - Populate the data in the table
 
-##### Create Datbase named retail_sales_analysis
+### Create Datbase named retail_sales_analysis
 
 ```sql
-CREATE DATABASE retail_sales_analsysi;```
-
-#### Create table
+CREATE DATABASE retail_sales_analsysi;
+```
+### Create table
 
 ```sql
 CREATE TABLE retail_sales
@@ -41,23 +41,23 @@ CREATE TABLE retail_sales
 		price_per_unit FLOAT,
 		cogs FLOAT,
 		total_sale FLOAT
-		); ```
-
+		);
+```
 **Note: data has been populated using pgadmin GUI**
 
 ### Perform Basic EDL and data cleaning
 
--- Taking a glance at the data
+#### Taking a glance at the data
 
 ```sql
-select * from retail_sales limit 10;```
+select * from retail_sales limit 10;
+```
 
-
--- Find size of the data
+--Find size of the data
 
 ```sql
-select count(*) from retail_sales;```
-
+select count(*) from retail_sales;
+```
 
 -- checking all the columns of the retail_Sales table
 
