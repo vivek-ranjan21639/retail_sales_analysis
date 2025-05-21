@@ -2,8 +2,8 @@
 
 ## Project Description
 
-#### Name of the project: retail_sales_analysis
-#### Database: ```retail_sales_analysis```
+**Name of the project:** retail_sales_analysis
+**Database:** `retail_sales_analysis`
 
 This project explores retail sales data and performs exploratory data analysis and data cleaning. Analysis on the cleaned data has also been performed to see various business insights. The purpose of the project is to showcase my skill in SQL and moreover my aptitude to ask the right and in-depth business questions. Even though the database contains only one data table titled 'retail_sales', some of the questions asked are complex and require the application of advanced SQL concepts. For any user who wants to get inspired and learn or perform similar analysis on this data, they can clone it and execute the same code or modify as per their understanding. In this reference, it is mentioned that the code here is written in PostgreSQL. Therefore, it is suggested that users may check the variability in the code if they are using any other platform.
 
@@ -15,19 +15,17 @@ This project explores retail sales data and performs exploratory data analysis a
 
 ## Detailed Project
 
-### Setting up of database
-    created a database titled retail_sales_analysis
-    created a table titled retail_sales
-    Populate the data in the table
+### Setting up of Database
+- created a database titled retail_sales_analysis
+- created a table titled 'retail_sales'.The table structure includes columns for transaction ID, sale date, sale time, customer ID, gender, age, product category, quantity sold, price per unit, cost of goods sold (COGS), and total sale amount.
+- Populate the data in the table
 
-
-
---Crete Datbase named retail_sales_analysis
+##### Create Datbase named retail_sales_analysis
 
 ```sql
 CREATE DATABASE retail_sales_analsysi;```
 
--- create table
+#### Create table
 
 ```sql
 CREATE TABLE retail_sales
@@ -45,7 +43,7 @@ CREATE TABLE retail_sales
 		total_sale FLOAT
 		); ```
 
-#### **Note: data has been populated using pgadmin GUI**
+**Note: data has been populated using pgadmin GUI**
 
 ### Perform Basic EDL and data cleaning
 
