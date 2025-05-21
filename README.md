@@ -16,16 +16,16 @@ This project explores retail sales data and performs exploratory data analysis a
 ## Detailed Project
 
 ### Setting up of Database
-- created a database titled retail_sales_analysis
-- created a table titled 'retail_sales'.The table structure includes columns for transaction ID, sale date, sale time, customer ID, gender, age, product category, quantity sold, price per unit, cost of goods sold (COGS), and total sale amount.
+- Created a database titled retail_sales_analysis
+- Created a table titled 'retail_sales'.The table structure includes columns for transaction ID, sale date, sale time, customer ID, gender, age, product category, quantity sold, price per unit, cost of goods sold (COGS), and total sale amount.
 - Populate the data in the table
 
-### Create Datbase named retail_sales_analysis
+**Create Database named retail_sales_analysis**
 
 ```sql
-CREATE DATABASE retail_sales_analsysi;
+CREATE DATABASE retail_sales_analysis;
 ```
-### Create table
+**Create table**
 
 ```sql
 CREATE TABLE retail_sales
@@ -43,56 +43,73 @@ CREATE TABLE retail_sales
 		total_sale FLOAT
 		);
 ```
-**Note: data has been populated using pgadmin GUI**
+***Note: data has been populated using pgadmin GUI***
 
 ### Perform Basic EDL and data cleaning
 
-#### Taking a glance at the data
+**Taking a glance at the data**
 
 ```sql
-select * from retail_sales limit 10;
+select *
+from retail_sales
+limit 10;
 ```
 
---Find size of the data
+**Find the size of the data**
 
 ```sql
 select count(*) from retail_sales;
 ```
 
--- checking all the columns of the retail_Sales table
-
+**Checking all the columns of the retail_Sales table**
 ```sql
 SELECT column_name
 FROM information_schema.columns
 WHERE table_name = 'retail_sales'
-order by ordinal_position;```
+order by ordinal_position;
+```
 
-
--- how many unique customers are there?
-
-```sql
-select count(distinct(customer_id)) from retail_sales;```
-
-
--- unique categories
+**How many unique customers are there?**
 
 ```sql
-select distinct category from retail_sales;```
+select
+	count(distinct(customer_id))
+from retail_sales;
+```
 
--- no. of transactions for each product category
-
-```sql
-select category, count(transactions_id) as No_of_orders from retail_sales group  by category;```
-
--- find out number of unique customers for each category?
+**Unique categories**
 
 ```sql
-select category, count(distinct customer_id) as NO_of_unique_customers from retail_sales group by category;```
+select
+	distinct category
+from retail_sales;
+```
 
---  checking for null values
+**no. of transactions for each product category**
 
 ```sql
-select * from retail_sales
+select
+	category,
+	count(transactions_id) as No_of_orders
+from retail_sales
+group  by category;
+```
+
+**Find out the number of unique customers for each category?**
+
+```sql
+select
+	category,
+	count(distinct customer_id) as NO_of_unique_customers
+from retail_sales
+group by category;
+```
+
+**checking for null values**
+
+```sql
+select *
+from retail_sales
 where transactions_id is null or
 	sale_date is null or
 	sale_time is null or
@@ -103,39 +120,35 @@ where transactions_id is null or
 	quantity is null or
 	price_per_unit is null or
 	cogs is null or
-	total_sale is null;```
+	total_sale is null;
+```
 
-**Note: There are null values in age column, quantity, price_per_unit, cogs, and total_sale columns.
-Null values of quantity, price_per_unit, cogs, and total_sale are in the same row. The no. of rows with Null Values in 
-these columns are not very large with respect to the size of the data (3 out of 2000). herefor, we can simply delete these 
-rows for cleaning the data.**
+***Note: There are null values in the age column, quantity, price_per_unit, cogs, and total_sale columns.
+Null values of quantity, price_per_unit, cogs, and total_sale are in the same row. The no. of rows with Null Values in these columns is not very large concerning the size of the data (3 out of 2000). Therefore, we can simply delete these rows to clean the data.***
 
--- remove the data point where qunatity was null
+**Remove the data point where quantity was null**
 
 ```sql
-delete from retail_sales where quantity is null;```
+delete from retail_sales where quantity is null;
+```
 
-**Note: For the purpose of handling the null values in age column. some exploratory steps like checking the size 
-of data points for male and female with in each product category has been perfomred.**
+***Note: For the purpose of handling the null values in the age column. Some exploratory steps, like checking the size of data points for males and females within each product category, have been performed.***
 
 
--- checking  how many data points are there male and female for each category. 
+**checking  how many roes are there for males and females for each category.**
 
 ```sql
 select category, 
 		count(case when gender = 'Male' then 1 end) as Male_count,
 		count(case when gender = 'Female' then 1 end) as Female_count
-from retail_sales group by category;```
+from retail_sales group by category;
+```
 
-**Note: the above querry shows the no. of data for male and females in every product category is same and 
-significant to bebused for handling the null values in age column**.
+***Note: the above query shows the no. of data for male and females in every product category is same and significant to be used for handling the null values in age column.***
 
-**Note: For the purpose of Null values in age column first we will calculate average age of male and average age of female 
-in each product categiry seperately. This average age will then be assigned to the correspomnding rows i.e. average age of 
-male in product category clothing will be assigned only in the null value of male in the Clothing category**
+***Note: For the purpose of Null values in age column first we will calculate average age of male and average age of female in each product categiry seperately. This average age will then be assigned to the correspomnding rows i.e. average age of male in product category clothing will be assigned only in the null value of male in the Clothing category***
 
-
--- Assign average value in place where age is null.
+**Assign average value in place where age is null**
 
 ```sql
 update retail_sales rs
@@ -146,16 +159,19 @@ set age = sub.avg_age from
 		group by category, gender) sub
 where rs.age is null 
 	and rs.category = sub.category
-	and rs.gender = sub.gender;```
+	and rs.gender = sub.gender;
+```
 
 
--- checking the updated table
+**Checking the updated table**
 
 ```sql
-select * from retail_sales;```
+select * from retail_sales;
+```
 
 
--- adding a new column titled age_category using age column for the purpose of analysi
+**Adding a new column titled age_category using the age column for analysis.**
+
 ```sql
 Alter table retail_sales add column age_category varchar(10);
 
@@ -166,7 +182,8 @@ set age_category =
 		when age between 35 and 44 then '35-44 yrs'
 		when age between 45 and 54 then '45-55 yrs'
 		else 'above 55'
-		end;```
+		end;
+```
 
 
 ### Data analysis as per business questions
@@ -179,13 +196,15 @@ select
     sum(total_sale) as Total_sales 
     from retail_sales 
     group  by category 
-    order by Total_sales desc;```
+    order by Total_sales desc;
+```
 
 
-2. Average age of customers who purchased items from beauty category?
+2. Average age of customers who purchased items from the beauty category?
 
 ```sql
-select round(avg(age),2) from retail_sales where category = 'Beauty';```
+select round(avg(age),2) from retail_sales where category = 'Beauty';
+```
 
 
 3. Retrieve all columns for sales made on '2022-11-05'.
@@ -193,35 +212,38 @@ select round(avg(age),2) from retail_sales where category = 'Beauty';```
 ```sql
 select *
 from retail_sales
-where sale_date = '2022-11-05';```
+where sale_date = '2022-11-05';
+```
 
-4. Retriev all transactions where the category is clothing and the quantity sold is more than 3 in the month of Nov-2022.
+4. Retrieve all transactions where the category is clothing and the quantity sold is more than 3 in the month of Nov-2022.
 
 ```sql
 select transactions_id, quantity, category, sale_date 
 from retail_sales
 where category = 'Clothing' and
 	quantity > 3 and 
-	to_char(sale_date, 'YYYY-MM') = '2022-11';```
+	to_char(sale_date, 'YYYY-MM') = '2022-11';
+```
 
-5. Find all the transaction where total sale is greater than 1000.
+5. Find all the transactions where the total sale is greater than 1000.
 
 ```sql
 select * 
 from retail_sales
-where total_sale > 1000;```
+where total_sale > 1000;
+```
 
-6. Find out the product with highest sales.
+6. Find out the product with the highest sales.
 
 ```sql
 select 
     category, 
     sum(total_sale) as Total_sales 
 from retail_sales 
-group by category;```
+group by category;
+```
 
-
-7. find out for each category which age_category has placed highest sales order (in terms of total sales).
+7. Find out for each category which age_category has placed the highest sales order (in terms of total sales).
 
 ```sql
 with ranked_sales as (
@@ -232,9 +254,10 @@ with ranked_sales as (
         rank() over (partition by category order by sum(total_sale) desc) as rn  
     from retail_sales group by category, age_category order by category, rn 
 )
-select * from ranked_sales where rn = 1;```
+select * from ranked_sales where rn = 1;
+```
 
-8. Find out for each category which group has placed highest of no. sales order (in terms of no. of orders).
+8. Find out for each category which group has placed the highest number of sales orders (in terms of the number of orders).
 
 ```sql
 with cte as (
@@ -242,9 +265,10 @@ with cte as (
  row_number() over (partition by category order by count(transactions_id) desc) as rnk 
  from retail_sales group by category, age_category order by category, rnk
 )
-select category, age_category, no_of_orders from cte where rnk = 1;```
+select category, age_category, no_of_orders from cte where rnk = 1;
+```
 
-9. Calculate sales order of various age groups for each category of product.
+9. Calculate the sales order of various age groups for each category of product.
 
 ```sql
 Select 
@@ -253,9 +277,10 @@ Select
     sum(total_sale) as total_sales
 from retail_sales 
 group by category, age_category 
-order by category, total_sales desc;```
+order by category, total_sales desc;
+```
 
-10. Is there any gender led difference in customers for demand of any particular category?
+10. Is there any gender led difference in customers for the demand of any particular category?
 
 ```sql
 select 
@@ -266,19 +291,21 @@ select
     row_number() over (partition by category order by count(transactions_id) desc) as rw
 from retail_sales 
 group by category, gender 
-order by category, rw;```
+order by category, rw;
+```
 
 
-11. which gender has placed the highest amount of sales order in each category?
+11. Which gender has placed the highest number of sales orders in each category?
 
 ```
-with cte as (
+With cte as (
 	select category, gender, sum(total_sale) as total_sales,
 		row_number() over(partition by category order by sum(total_sale) desc) as rw
 	from retail_sales group by category,  gender order by  category, rw)
-select  category, gender, total_sales from cte where rw = 1;```
+select  category, gender, total_sales from cte where rw = 1;
+```
 
-12. Which gender has placed highest no. of orders in each category?
+12. Which gender has placed the highest no. of orders in each category?
 
 ```sql
 with cte as (
@@ -286,15 +313,17 @@ select category, gender, count(transactions_id) as no_of_orders, sum(total_sale)
 row_number() over (partition by category order by count(transactions_id) desc) as rw
 from retail_sales group by category, gender order by category, rw
 )
-select category, gender, no_of_orders from cte where rw = 1;```
+select category, gender, no_of_orders from cte where rw = 1;
+```
 
-13. Find out the sales with respect to various age category. the order should be decresing in term of sales value.
+13. Find out the sales concerning various age categories. The order should be decreasing in terms of sales value.
 
 ```sql
 select age_category, sum(total_sale) as net_sales
 from retail_sales
 group by age_category
-order by sum(total_sale) desc;```
+order by sum(total_sale) desc;
+```
 
 14. Calculate total sales each month in each year.
 
@@ -305,9 +334,10 @@ select
 	count(total_sale) as net_sale
 from retail_sales
 group by sale_year, sale_month
-order by sale_year, sale_month;```
+order by sale_year, sale_month;
+```
 
-15. Find out number of unique customers who purchased at least one product from each category?
+15. Find out the number of unique customers who purchased at least one product from each category.
 
 ```sql
 with cte as (
@@ -316,9 +346,10 @@ with cte as (
 	group by customer_id
 	having count(distinct category) = (select count(distinct category) from retail_sales)
 )
-select count(distinct customer_id) from cte;```
+select count(distinct customer_id) from cte;
+```
 
-16. Which is the highest revenue generating category?
+16. Which is the highest revenue-generating category?
 
 ```sql
 select 
@@ -327,9 +358,10 @@ select
 from retail_sales
 group by category
 order by revenue desc
-limit 1;```
+limit 1;
+```
 
-17. Find out the customers who placed orders higher than the average order value for each category?
+17. Find out the customers who placed orders higher than the average order value for each category.
 
 ```sql
 WITH cat_avg as(
@@ -343,9 +375,10 @@ cust_avg as(
 select customer_id, cust_avg.category, avg_by_cust, avg_by_cat 
 from cat_avg right join cust_avg on cat_avg.category = cust_avg.category
 where avg_by_cust > avg_by_cat
-order by customer_id;```
+order by customer_id;
+```
 
-18. Find out the top 20% of the customer in terms of  sales value.
+18. Find out the top 20% of the customers in terms of  sales value.
 
 ```sql
 with cust_tab as (
@@ -356,9 +389,11 @@ with cust_tab as (
 tiled_cust as(
 	select *, Ntile(5) over (order by total_spending desc) as bucket_cat from cust_tab
 )
-select * from tiled_cust where bucket_cat = 1;```
+select * from tiled_cust where bucket_cat = 1;
+```
 
 ** Using percent_rank: howevere it is less efficient than ntile in this case**
+
 ```sql
 with cust_tab as (
 	select customer_id, sum(total_sale) as total_spending
@@ -369,10 +404,11 @@ ranked_cust as(
 	select *, percent_rank() over(order by total_spending desc) as rnk
 	from cust_tab
 )
-select customer_id, total_spending from ranked_cust where rnk < 0.2;```
+select customer_id, total_spending from ranked_cust where rnk < 0.2;
+```
 
 
-19. Find out any seasonality if exist for each product
+19. Find out any seasonality if exists for each product
 
 ```sql
 with cte1 as(
@@ -392,10 +428,11 @@ cte2 as (
 select * 
 from cte2
 where rn in (1,2,3,4);
-order by category, sale_yr;```
+order by category, sale_yr;
+```
 
 
-20. Find out the time interval in which the most of the of the orders are being placed.
+20. Find out the time interval in which most of the orders are being placed.
 
 ```sql
 with cte as(
@@ -425,34 +462,28 @@ from ranked
 )
 select * 
 from fin
-where cummulative_percent <= 80;```
+where cummulative_percent <= 80;
+```
 
 ### Summary of findings
-This project focuses on various business insights like revenue from differnet product categories, 
-highest selling product, gender led sale differneces in different product categories,
-temporal sales trend etc. Some complex insights has also been drwan like time interval when 
-highest no. of orders are placed, seasonality of the product sell etc. 
+This project focuses on various business insights like revenue from different product categories, the 
+highest selling product, gender led sales differences in different product categories,
+temporal sales trend etc. Some complex insights have also been drawn, like the time interval when the 
+highest no. of orders are placed, seasonality of the product sales etc. 
 Some of the insights answering these business questions are as follows:
-. Electronics is the highest selling product in terms of quanity and generates the highest revenue among the three product category followed by clothing and beauty.
-. Average age of the customer who placed orders in beauty category is 40 years. This insight is interesting as 
-    common perception is that young generation would care more about beauty product. However the insights drawn from 
-    this dataset tell otherwise. This insights will help immensly in ads targeting.   
-. If we talk in term of age category, 45-55 years old contributed the highest no. of sales in Beauty, in clothing 18-26 years old had the highest contribution and 
-    for electronics above 55 years old had the highest contribution.
-. for beauty and clothing female contributed the highest sales while in electronics male contributed the highest sales.
-. About 82% of the customers bought products from all the three categories.
-. Across each product categories the highest no. of orders were placed in the months of September, October, November and December. Therefore seasonlity exists for
-    these products. These information may be used for strategiing to increase the sale like providing additional discounts, special offersm vouchers etc. 
-. 5:00 PM to 11:00 PM is the time interval when highest no. of orders are placed. this insights may be used for floating time targeted digital ads.
-Other than above there are several other insights like customers who order values are more than from given values and average sales of that category. Such insights are 
-very useful from business perspective to increase the sales and thus boosting business growth.
+. Electronics is the highest-selling product in terms of quantity and generates the highest revenue among the three product categories, followed by clothing and beauty.
+. The average age of the customer who placed orders in the beauty category is 40 years. This insight is interesting as the common perception is that the young generation would care more about beauty products. However, the insights drawn from this dataset tell otherwise. This insight will help immensely in ad targeting.   
+. If we talk in terms of age category, 45-55 years old contributed the highest no. of sales in Beauty, in clothing, 18-26 years old had the highest contribution and for electronics above 55 years old had the highest contribution.
+. For beauty and clothing, females contributed the highest sales, while in electronics, males contributed the highest sales.
+. About 82% of the customers bought products from all three categories.
+. Across each product category, the highest no. of orders were placed in September, October, November and December. Therefore, seasonality exists for these products. This information may be used for strategising to increase sales, like providing additional discounts, special offers, vouchers, etc. 
+. 5:00 PM to 11:00 PM is the time interval when the highest no. of orders are placed. These insights may be used for floating time-targeted digital ads.
+Other than the above, there are several other insights, like customers who order values are more than from given values and the average sales of that category. Such insights are 
+very useful from a business perspective to increase sales and thus boost business growth.
 
 ### Conclusion
-This project focuses on gaining insights about potential customer who can drive further growth, customer features for these product categories, sales trend, seasonlity, 
-order placing behaviour of customers etc. However, the scope and potential of getting insighst even from this small dataset is huge. A lot of questions has not been 
-asked delibareatly as this will mix and complicate the insights and make it distant with teh goal of asking clear business questions. Seperate project may be carried out 
-for drawing further insights. 
+This project aims to uncover insights about potential customers who could contribute to future growth, explore customer characteristics across different product categories, and analyse sales trends, seasonality, and customer purchasing behaviour. Although the dataset is small, it holds significant potential for deeper insights. Many questions have been intentionally left out to maintain focus on clear and specific business objectives. A separate project could be undertaken to explore additional insights without complicating the current analysis. 
 
 
-**Any user may use this project for learning purpose. They may do so by cloning this repo.**
+**Any user may use this project for learning purposes. They may do so by cloning this repo.**
  
