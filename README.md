@@ -1,5 +1,5 @@
 # Retail_sales_analysis
-**Email Id:** vivekranjan21639@gmail.com
+**Email Id:** vivekranjan21639@gmail.com  
 **LinkedIn:** https://www.linkedin.com/in/vivek-ranjan-jnu/ 
 
 ## Project Description
