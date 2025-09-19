@@ -2,7 +2,7 @@
 
 ## Project Description
 
-**Name of the project:** retail_sales_analysis
+**Name of the project:** retail_sales_analysis  
 **Database:** `retail_sales_analysis`
 
 This project explores retail sales data and performs exploratory data analysis and data cleaning. Analysis on the cleaned data has also been performed to see various business insights. The purpose of the project is to showcase my skill in SQL and moreover my aptitude to ask the right and in-depth business questions. Even though the database contains only one data table titled 'retail_sales', some of the questions asked are complex and require the application of advanced SQL concepts. For any user who wants to get inspired and learn or perform similar analysis on this data, they can clone it and execute the same code or modify as per their understanding. In this reference, it is mentioned that the code here is written in PostgreSQL. Therefore, it is suggested that users may check the variability in the code if they are using any other platform.
